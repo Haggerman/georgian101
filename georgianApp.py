@@ -1,13 +1,31 @@
 import flask
-from flask import request
+from flask import flash, request, redirect
+import numpy
+import cv2
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 georgianApp = flask.Flask(__name__)
 
-@georgianApp.route('/', methods=['GET'])
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@georgianApp.route('/', methods=['GET','POST'])
 def home():
-    year = request.args['year']
-    try:
-        return year
-    except KeyError:
-        return 'Invalid input'
+        if request.method == 'POST':
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            # if user does not select file, browser also
+            # submit a empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                print('a')
+
+
 
