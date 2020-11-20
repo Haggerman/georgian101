@@ -15,7 +15,7 @@ georgianApp = flask.Flask(__name__)
 @georgianApp.route('/', methods=['GET','POST'])
 def home():
     a = numpy.zeros(shape=(5, 2))
-    return a
+    return a[1][1]
 
 
 if __name__ == "__main__":
