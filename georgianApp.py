@@ -1,7 +1,7 @@
 import flask
 from flask import flash, request, redirect
-import numpy
-import cv2
+#import numpy
+#import cv2
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
