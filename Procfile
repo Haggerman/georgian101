@@ -1,1 +1,1 @@
-web: gunicorn georgianApp:georgianApp
+web: gunicorn server:app
