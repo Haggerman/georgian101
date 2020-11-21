@@ -3,7 +3,7 @@ import os
 import sys
 
 
-async def read_image(img_path, lang='eng'):
+async def read_image(img_path, lang='kat'):
     """
     Performs OCR on a single image
     :img_path: str, path to the image file
