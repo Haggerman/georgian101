@@ -33,7 +33,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[List
 
     for coord in coordinates:
         coordList = coord.split(',')
-        radky.append(Radek(xStart=coordList[0], yStart=coordList[1], xKonec=coordList[2], yKonec=coordList[3]))
+        radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
 
     text = await read_image(temp_file)
 
