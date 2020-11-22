@@ -20,7 +20,8 @@ def home(request: Request):
 async def extract_text(image: UploadFile = File(...), coordinates: List[str] = Query(None)) -> Optional[List]:
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     text = await read_image(temp_file)
-    return {"filename": image.filename, "text": text, "coordinates": coordinates}
+
+    return {"filename": image.filename, "text": text, "coordinates": coordinates[0]}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
