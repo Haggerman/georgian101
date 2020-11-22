@@ -35,9 +35,9 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[List
     text = ''
     for coord in coordinates:
         coordList = coord.split(',')
-        text = await read_image(img,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
+       # text = await read_image(img,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
         radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
-
+    text = await read_image(img, 1, 2, 3, 4, 'kat')
     return {"filename": image.filename, "text": text, "coordinates": radky[0]}
 
 
@@ -52,6 +52,6 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
 async def read_image(img,x,y,xEnd,yEnd,lang='kat'):
     try:
         hImg, wImg, _ = img.shape
-        return pytesseract.image_to_string(img[4:30,4:200], lang=lang)
+        return pytesseract.image_to_string(img[1:35,1:205], lang=lang)
     except:
         return "[ERROR] Unable to process image"
