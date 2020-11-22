@@ -38,7 +38,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[List
         text = await read_image(img,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
         radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
 
-    return {"filename": image.filename,"image": img[coordList[1]:coordList[3],coordList[0]:coordList[2]], "text": text, "coordinates": radky[0]}
+    return {"filename": image.filename,"image": img[int(coordList[1]):int(coordList[3]),int(coordList[0]):int(coordList[2])], "text": text, "coordinates": radky[0]}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
