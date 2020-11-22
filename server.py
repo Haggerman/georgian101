@@ -50,6 +50,7 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
 
 async def read_image(img_path,x,y,xEnd,yEnd,lang='kat'):
     try:
-        return pytesseract.image_to_string(img_path[y:yEnd,x:xEnd], lang=lang)
+        img = cv2.imread(img_path)
+        return pytesseract.image_to_string(img[y:yEnd,x:xEnd], lang=lang)
     except:
         return "[ERROR] Unable to process file: {0}".format(img_path)
