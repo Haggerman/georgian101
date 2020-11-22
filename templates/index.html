@@ -25,8 +25,8 @@
     var formData = new FormData();
     var endpoint = '/api/v1/extract_text';
     formData.append('image', files[0])
-    formData.append('coordinates', 10,20,30,40)
-    formData.append('coordinates', 100,200,300,400)
+    formData.append('coordinates', "1,2,3,4")
+    formData.append('coordinates', "1,2,3,4")
 
     $.ajax({
         type: 'POST',
