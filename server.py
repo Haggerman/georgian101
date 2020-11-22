@@ -17,7 +17,7 @@ def home(request: Request):
 
 
 @app.post("/api/v1/extract_text")
-async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = None):
+async def extract_text(image: UploadFile = File(...), coordinates: str):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     text = await read_image(temp_file)
 
