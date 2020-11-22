@@ -4,6 +4,7 @@ from typing import Optional, List
 import shutil
 import os
 import pytesseract
+import cv2
 import uuid
 import json
 
@@ -30,12 +31,11 @@ def home(request: Request):
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[List[str]] = Form(...)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     radky = []
-
+    text = ''
     for coord in coordinates:
         coordList = coord.split(',')
+        text = await read_image(temp_file,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
         radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
-
-    text = await read_image(temp_file)
 
     return {"filename": image.filename, "text": text, "coordinates": radky[0]}
 
@@ -48,8 +48,8 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
     return temp_file
 
 
-async def read_image(img_path, lang='kat'):
+async def read_image(img_path,x,y,xEnd,yEnd,lang='kat'):
     try:
-        return pytesseract.image_to_string(img_path, lang=lang)
+        return pytesseract.image_to_string(img_path[y:yEnd,x:xEnd], lang=lang)
     except:
         return "[ERROR] Unable to process file: {0}".format(img_path)
