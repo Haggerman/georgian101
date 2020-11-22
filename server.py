@@ -17,11 +17,11 @@ def home(request: Request):
 
 
 @app.post("/api/v1/extract_text")
-async def extract_text(image: UploadFile = File(...), coordinates: Optional[List[str]] = Query(None)):
+async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = None):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     text = await read_image(temp_file)
 
-    return {"filename": image.filename, "text": text, "coordinates": coordinates[0]}
+    return {"filename": image.filename, "text": text, "coordinates": coordinates}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
