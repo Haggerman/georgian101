@@ -30,11 +30,12 @@ def home(request: Request):
 @app.post("/api/v1/extract_text")
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[List[str]] = Form(...)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
+    img = cv2.imread(temp_file)
     radky = []
     text = ''
     for coord in coordinates:
         coordList = coord.split(',')
-        text = await read_image(temp_file,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
+        text = await read_image(img,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
         radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
 
     return {"filename": image.filename, "text": text, "coordinates": radky[0]}
@@ -48,10 +49,9 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
     return temp_file
 
 
-async def read_image(img_path,x,y,xEnd,yEnd,lang='kat'):
+async def read_image(img,x,y,xEnd,yEnd,lang='kat'):
     try:
-        img = cv2.imread(img_path)
         hImg, wImg, _ = img.shape
         return pytesseract.image_to_string(img[0:hImg,0:wImg], lang=lang)
     except:
-        return "[ERROR] Unable to process file: {0}".format(img_path)
+        return "[ERROR] Unable to process image"
