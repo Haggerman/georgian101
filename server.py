@@ -11,6 +11,16 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 
+class Radek:
+  def __init__(self,xStart,yStart,xKonec, yKonec):
+    self.x = xStart
+    self.y = yStart
+    self.xKonec = xKonec
+    self.yKonec = yKonec
+    self.sirka = xKonec - xStart
+    self.vyska = yKonec - yStart
+
+
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -19,9 +29,15 @@ def home(request: Request):
 @app.post("/api/v1/extract_text")
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[List[str]] = Form(...)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
+    radky = []
+
+    for coord in coordinates:
+        coordList = coord.split(',')
+        radky.append(Radek(xStart=coordList[0], yStart=coordList[1], xKonec=coordList[2], yKonec=coordList[3]))
+
     text = await read_image(temp_file)
 
-    return {"filename": image.filename, "text": text, "coordinates": coordinates[0]}
+    return {"filename": image.filename, "text": text, "coordinates": radky[0]}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
