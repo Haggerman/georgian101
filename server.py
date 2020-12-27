@@ -44,6 +44,9 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
     else:
         text = text + await read_image_noCoord(img, lang='kat')
 
+    if not text or text.isspace():
+        text = "Na obrázku se nepodařilo rozpoznat žádný text"
+
     return {"filename": image.filename, "text": text}
 
 
@@ -60,11 +63,11 @@ async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
         hImg, wImg, _ = img.shape
         return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang)
     except:
-        return "[ERROR] Unable to process image"
+        return "[ERROR] Obrázek se nepodařilo zpracovat"
 
 
 async def read_image_noCoord(img, lang='kat'):
     try:
         return pytesseract.image_to_string(img, lang=lang)
     except:
-        return "[ERROR] Unable to process image"
+        return "[ERROR] Obrázek se nepodařilo zpracovat"
