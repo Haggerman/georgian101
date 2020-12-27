@@ -44,7 +44,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
     else:
         text = text + await read_image_noCoord(img, lang='kat')
 
-    return {"filename": image.filename, "text": text, "coordinates": radky[0]}
+    return {"filename": image.filename, "text": text}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
