@@ -13,13 +13,13 @@ templates = Jinja2Templates(directory="templates")
 
 
 class Radek:
-  def __init__(self,xStart,yStart,xKonec, yKonec):
-    self.x = xStart
-    self.y = yStart
-    self.xKonec = xKonec
-    self.yKonec = yKonec
-    self.sirka = xKonec - xStart
-    self.vyska = yKonec - yStart
+    def __init__(self, xStart, yStart, xKonec, yKonec):
+        self.x = xStart
+        self.y = yStart
+        self.xKonec = xKonec
+        self.yKonec = yKonec
+        self.sirka = xKonec - xStart
+        self.vyska = yKonec - yStart
 
 
 @app.get("/")
@@ -33,17 +33,16 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
     img = cv2.imread(temp_file)
     radky = []
     text = ''
-    coordList = coordinates.split(',')
-    for x in range(0, len(coordList)-3, 4):
-        text = text + await read_image(img, int(coordList[x]), int(coordList[x+1]), int(coordList[x+2]), int(coordList[x+3]),
-                                       'kat')
-        radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]),
-                           yKonec=int(coordList[3])))
-
-    #for coord in coordinates:
-        #    coordList = coord.split(',')
-        #text = text + await read_image(img,int(coordList[0]),int(coordList[1]),int(coordList[2]),int(coordList[3]),'kat')
-        #radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]), yKonec=int(coordList[3])))
+    if coordinates is not None:
+        coordList = coordinates.split(',')
+        for x in range(0, len(coordList) - 3, 4):
+            text = text + await read_image(img, int(coordList[x]), int(coordList[x + 1]), int(coordList[x + 2]),
+                                           int(coordList[x + 3]),
+                                           'kat')
+            radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]),
+                               yKonec=int(coordList[3])))
+    else:
+        text = text + await read_image(img, lang='kat')
 
     return {"filename": image.filename, "text": text, "coordinates": radky[0]}
 
@@ -56,9 +55,16 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
     return temp_file
 
 
-async def read_image(img,x,y,xEnd,yEnd,lang='kat'):
+async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
     try:
         hImg, wImg, _ = img.shape
-        return pytesseract.image_to_string(img[y:yEnd,x:xEnd], lang=lang)
+        return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang)
+    except:
+        return "[ERROR] Unable to process image"
+
+
+async def read_image(img, lang='kat'):
+    try:
+        return pytesseract.image_to_string(img, lang=lang)
     except:
         return "[ERROR] Unable to process image"
