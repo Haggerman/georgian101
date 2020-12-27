@@ -42,7 +42,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
             radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]),
                                yKonec=int(coordList[3])))
     else:
-        text = text + await read_image(img, lang='kat')
+        text = text + await read_image_noCoord(img, lang='kat')
 
     return {"filename": image.filename, "text": text, "coordinates": radky[0]}
 
@@ -63,7 +63,7 @@ async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
         return "[ERROR] Unable to process image"
 
 
-async def read_image(img, lang='kat'):
+async def read_image_noCoord(img, lang='kat'):
     try:
         return pytesseract.image_to_string(img, lang=lang)
     except:
