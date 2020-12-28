@@ -8,7 +8,10 @@
       <h1>Lost in Georgia</h1>
     </div>
     <label for="image_file">Select image</label>
-    <input class="btn btn-warning" type="file" id="image_file" name="myfile" multiple>
+    <input class="btn btn-warning" type="file" id="image_file" name="myfile" >
+    <br>
+    <label for="coordinates">Set coordinates</label>
+    <input class="btn btn-warning" type="text" id="coordinates" name="coordinates" >
     <br>
     <button class="btn btn-success" onclick="performOCR()"> Get text </button>
     <br>
@@ -21,9 +24,11 @@
 <script>
   function performOCR() {
     var files = document.getElementById("image_file").files
+    var coordinates = document.getElementById("coordinates").value
     var formData = new FormData();
     var endpoint = '/api/v1/extract_text';
     formData.append('image', files[0])
+    formDara.append('coordinates, coordinates)
 
     $.ajax({
         type: 'POST',
