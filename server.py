@@ -33,16 +33,22 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
     img = cv2.imread(temp_file)
     radky = []
     text = ''
+
     if coordinates is not None:
         coordList = coordinates.split(',')
         for x in range(0, len(coordList) - 3, 4):
-            text = text + await read_image(img, int(coordList[x]), int(coordList[x + 1]), int(coordList[x + 2]),
-                                           int(coordList[x + 3]),
-                                           'kat')
-            radky.append(Radek(xStart=int(coordList[0]), yStart=int(coordList[1]), xKonec=int(coordList[2]),
-                               yKonec=int(coordList[3])))
+            radky.append(Radek(xStart=int(coordList[x]), yStart=int(coordList[x + 1]), xKonec=int(coordList[x + 2]),
+                               yKonec=int(coordList[x + 3])))
+
+            radky.sort(key=lambda item: (item.x, item.y))
+
+            for radek in radky:
+                text = text + await read_image(img, int(radek.x), int(radek.y), int(radek.xKonec),
+                                               int(radek.yKonec),
+                                               'kat')
     else:
         text = text + await read_image_noCoord(img, lang='kat')
+
 
     if not text or text.isspace():
         text = "Na obrázku se nepodařilo rozpoznat žádný text"
@@ -71,3 +77,4 @@ async def read_image_noCoord(img, lang='kat'):
         return pytesseract.image_to_string(img, lang=lang)
     except:
         return "[ERROR] Obrázek se nepodařilo zpracovat"
+
