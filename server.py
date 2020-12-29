@@ -40,7 +40,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
             radky.append(Radek(xStart=int(coordList[x]), yStart=int(coordList[x + 1]), xKonec=int(coordList[x + 2]),
                                yKonec=int(coordList[x + 3])))
 
-        radky.sort(key=lambda item: (item.x, item.y))
+        radky.sort(key=lambda item: (item.y, item.x))
 
         for radek in radky:
             text = text + await read_image(img, int(radek.x), int(radek.y), int(radek.xKonec),
