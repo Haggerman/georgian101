@@ -68,7 +68,7 @@ async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
         hImg, wImg, _ = img.shape
         return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang, config=conf)
     except:
-        return "[ERROR] Obrázek se nepodařilo zpracovat"
+        return ""
 
 
 async def read_image_noCoord(img, lang='kat'):
