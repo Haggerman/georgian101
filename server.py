@@ -64,15 +64,17 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
 
 async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
     try:
+        conf = r'--oem 1 --psm 3'
         hImg, wImg, _ = img.shape
-        return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang)
+        return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang, config=conf)
     except:
         return "[ERROR] Obrázek se nepodařilo zpracovat"
 
 
 async def read_image_noCoord(img, lang='kat'):
     try:
-        return pytesseract.image_to_string(img, lang=lang)
+        conf = r'--oem 1 --psm 3'
+        return pytesseract.image_to_string(img, lang=lang, config=conf)
     except:
         return "[ERROR] Obrázek se nepodařilo zpracovat"
 
