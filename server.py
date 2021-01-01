@@ -1,12 +1,10 @@
 from fastapi import FastAPI, Request, File, UploadFile, BackgroundTasks, Query, Form
 from fastapi.templating import Jinja2Templates
-from typing import Optional, List
+from typing import Optional
 import shutil
 import os
 import pytesseract
 import cv2
-import uuid
-import json
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -30,7 +28,7 @@ def home(request: Request):
 @app.post("/api/v1/extract_text")
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
-    img = cv2.imread(image)
+    img = cv2.imread(temp_file)
     radky = []
     text = ''
 
