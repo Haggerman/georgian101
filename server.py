@@ -28,10 +28,8 @@ def home(request: Request):
 
 @app.post("/api/v1/extract_text")
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
-    start_time = time.time()
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     img = cv2.imread(temp_file)
-    nacteni = time.time() - start_time
     radky = []
     text = ''
     start_time = time.time()
@@ -53,8 +51,7 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
     if not text or text.isspace():
         text = "Na obrázku se nepodařilo rozpoznat žádný text"
 
-    tesseract = start_time - time.time()
-    return {"filename": image.filename, "text": text, "time": nacteni, "tessearact": tesseract }
+    return {"filename": image.filename, "text": text}
 
 
 def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
