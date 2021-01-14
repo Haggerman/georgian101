@@ -29,7 +29,7 @@ def home(request: Request):
 @app.post("/api/v1/extract_text")
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
-    img = cv2.imread(temp_file, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(temp_file)
     radky = []
     text = ''
     if coordinates is not None:
