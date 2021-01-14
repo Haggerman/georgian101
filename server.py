@@ -5,7 +5,6 @@ import shutil
 import os
 import pytesseract
 import cv2
-import time
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -30,7 +29,6 @@ def home(request: Request):
 async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     img = cv2.imread(temp_file, cv2.IMREAD_GRAYSCALE)
-    img = cv2.adaptiveThreshold(img, 127, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 11)
     radky = []
     text = ''
 
