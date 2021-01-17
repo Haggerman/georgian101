@@ -26,7 +26,7 @@ def home(request: Request):
 
 
 @app.post("/api/v1/extract_text")
-async def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
+def extract_text(image: UploadFile = File(...), coordinates: Optional[str] = Form(None)):
     temp_file = _save_file_to_disk(image, path="temp", save_as="temp")
     img = cv2.imread(temp_file, cv2.IMREAD_GRAYSCALE)
     radky = []
@@ -41,11 +41,11 @@ async def extract_text(image: UploadFile = File(...), coordinates: Optional[str]
         radky.sort(key=lambda item: (item.y, item.x))
 
         for radek in radky:
-            text = text + await read_image(img, int(radek.x), int(radek.y), int(radek.xKonec),
+            text = text + read_image(img, int(radek.x), int(radek.y), int(radek.xKonec),
                                            int(radek.yKonec),
                                            'kat')
     else:
-        text = text + await read_image_noCoord(img, lang='kat')
+        text = text + read_image_noCoord(img, lang='kat')
 
     if not text or text.isspace():
         text = "Na obrázku se nepodařilo rozpoznat žádný text"
@@ -61,7 +61,7 @@ def _save_file_to_disk(uploaded_file, path=".", save_as="default"):
     return temp_file
 
 
-async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
+def read_image(img, x, y, xEnd, yEnd, lang='kat'):
     try:
         conf = r'--oem 1 --psm 3'
         return pytesseract.image_to_string(img[y:yEnd, x:xEnd], lang=lang, config=conf)
@@ -69,7 +69,7 @@ async def read_image(img, x, y, xEnd, yEnd, lang='kat'):
         return ""
 
 
-async def read_image_noCoord(img, lang='kat'):
+def read_image_noCoord(img, lang='kat'):
     try:
         conf = r'--oem 1 --psm 3'
         return pytesseract.image_to_string(img, lang=lang, config=conf)
